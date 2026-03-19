@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>巴黎三日 · Paris Weekend</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Serif+SC:wght@300;400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5f0e8;
+    --dark: #1a1612;
+    --gold: #c9a84c;
+    --rouge: #b5342a;
+    --stone: #8c7b6b;
+    --light-stone: #d4c9b8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--dark);
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    height: 100vh;
+    min-height: 600px;
+    display: flex;
+    align-items: flex-end;
+    padding: 4rem;
+    background: var(--dark);
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 70% 40%, rgba(201,168,76,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse at 20% 80%, rgba(181,52,42,0.1) 0%, transparent 50%),
+      linear-gradient(160deg, #1a1612 0%, #2d2520 50%, #1a1612 100%);
+  }
+
+  /* Eiffel tower silhouette */
+  .tower-svg {
+    position: absolute;
+    right: 8%;
+    bottom: 0;
+    width: 220px;
+    opacity: 0.12;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 700px;
+  }
+
+  .hero-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    line-height: 0.9;
+    color: var(--cream);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-sub {
+    font-size: 0.9rem;
+    color: var(--light-stone);
+    line-height: 1.8;
+    letter-spacing: 0.05em;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  .hero-meta {
+    position: absolute;
+    top: 4rem;
+    right: 4rem;
+    text-align: right;
+    z-index: 2;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s forwards;
+  }
+
+  .hero-meta .date {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--cream);
+    margin-bottom: 0.3rem;
+  }
+
+  .hero-meta .people {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--stone);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* TIPS BANNER */
+  .tips-bar {
+    background: var(--gold);
+    padding: 0.8rem 4rem;
+    display: flex;
+    gap: 3rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .tips-bar::-webkit-scrollbar { display: none; }
+
+  .tip-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    color: var(--dark);
+  }
+
+  .tip-item::before {
+    content: '★';
+    font-size: 0.6rem;
+  }
+
+  /* MAIN */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+  }
+
+  /* DAY SECTION */
+  .day-section {
+    margin-bottom: 6rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s, transform 0.7s;
+  }
+
+  .day-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .day-header {
+    display: flex;
+    align-items: baseline;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--light-stone);
+  }
+
+  .day-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--light-stone);
+  }
+
+  .day-info {}
+
+  .day-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--dark);
+    margin-bottom: 0.3rem;
+  }
+
+  .day-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: var(--stone);
+    text-transform: uppercase;
+  }
+
+  /* TIMELINE */
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--gold), var(--light-stone) 80%, transparent);
+  }
+
+  .event {
+    position: relative;
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.8rem;
+    padding-bottom: 1.8rem;
+    border-bottom: 1px solid rgba(212,201,184,0.4);
+  }
+
+  .event:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+
+  .event::before {
+    content: '';
+    position: absolute;
+    left: -2rem;
+    top: 0.45rem;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--gold);
+    transform: translateX(-3px);
+  }
+
+  .event.meal::before { background: var(--rouge); }
+  .event.warning::before { background: #e07b00; }
+
+  .event-time {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--stone);
+    padding-top: 0.15rem;
+    letter-spacing: 0.05em;
+  }
+
+  .event-body {}
+
+  .event-title {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--dark);
+    margin-bottom: 0.35rem;
+    line-height: 1.4;
+  }
+
+  .event-title .tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    padding: 0.15rem 0.5rem;
+    border-radius: 2px;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    text-transform: uppercase;
+  }
+
+  .tag-must { background: var(--rouge); color: white; }
+  .tag-shop { background: var(--gold); color: var(--dark); }
+  .tag-food { background: var(--dark); color: var(--cream); }
+  .tag-tip { background: #e07b00; color: white; }
+
+  .event-note {
+    font-size: 0.82rem;
+    color: var(--stone);
+    line-height: 1.7;
+  }
+
+  /* MAP SECTION */
+  .map-section {
+    background: var(--dark);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 4rem 0;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s, transform 0.7s;
+  }
+
+  .map-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .map-header {
+    padding: 2rem 2.5rem 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .map-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: var(--cream);
+    margin-bottom: 0.3rem;
+  }
+
+  .map-header p {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--stone);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .map-days {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 0;
+  }
+
+  .map-day {
+    padding: 2rem 2.5rem;
+    border-right: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .map-day:last-child { border-right: none; }
+
+  .map-day-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+
+  .map-day-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--cream);
+    margin-bottom: 1.2rem;
+  }
+
+  .map-stops {
+    list-style: none;
+    margin-bottom: 1.5rem;
+  }
+
+  .map-stops li {
+    font-size: 0.78rem;
+    color: var(--stone);
+    line-height: 1.6;
+    padding: 0.25rem 0;
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .map-stops li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-size: 0.65rem;
+  }
+
+  .map-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--gold);
+    color: var(--dark);
+    text-decoration: none;
+    padding: 0.6rem 1.1rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    transition: opacity 0.2s;
+  }
+
+  .map-btn:hover { opacity: 0.85; }
+
+  .map-btn-full {
+    display: block;
+    text-align: center;
+    background: rgba(255,255,255,0.04);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 1.2rem;
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--stone);
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .map-btn-full:hover {
+    background: rgba(201,168,76,0.1);
+    color: var(--gold);
+  }
+
+  /* NOTES */
+  .notes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 4rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s, transform 0.7s;
+  }
+
+  .notes-grid.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .note-card {
+    border: 1px solid var(--light-stone);
+    padding: 1.5rem;
+    position: relative;
+  }
+
+  .note-card::before {
+    content: attr(data-icon);
+    position: absolute;
+    top: -0.8rem;
+    left: 1rem;
+    background: var(--cream);
+    padding: 0 0.5rem;
+    font-size: 1rem;
+  }
+
+  .note-card h3 {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-bottom: 0.8rem;
+  }
+
+  .note-card p, .note-card li {
+    font-size: 0.83rem;
+    line-height: 1.8;
+    color: var(--dark);
+  }
+
+  .note-card ul { padding-left: 1rem; }
+  .note-card li { margin-bottom: 0.3rem; }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark);
+    color: var(--stone);
+    text-align: center;
+    padding: 3rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  footer span { color: var(--gold); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* DIVIDER */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin: 4rem 0 3rem;
+    color: var(--stone);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .section-divider::before, .section-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--light-stone);
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+
+  <svg class="tower-svg" viewBox="0 0 100 300" fill="white" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="50,0 58,80 42,80" />
+    <rect x="42" y="78" width="16" height="4"/>
+    <polygon points="42,82 62,130 38,130" />
+    <rect x="35" y="128" width="30" height="5"/>
+    <polygon points="35,133 70,200 30,200" />
+    <rect x="25" y="198" width="50" height="6"/>
+    <polygon points="25,204 78,270 22,270" />
+    <rect x="20" y="268" width="60" height="6"/>
+    <rect x="20" y="274" width="8" height="26"/>
+    <rect x="72" y="274" width="8" height="26"/>
+    <rect x="35" y="274" width="30" height="10"/>
+  </svg>
+
+  <div class="hero-meta">
+    <div class="date">21–23 March 2026</div>
+    <div class="people">3 Travellers · Edinburgh → Paris</div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-label">Weekend Itinerary</div>
+    <h1 class="hero-title">Un Weekend<br>à <em>Paris</em></h1>
+    <p class="hero-sub">爱丁堡出发 · 博韦机场 · 拉德芳斯酒店<br>铁塔 · 卢浮宫 · 凯旋门 · 玛黑区 · 香榭购物</p>
+  </div>
+</section>
+
+<!-- TIPS BAR -->
+<div class="tips-bar">
+  <div class="tip-item">卢浮宫必须提前网购票</div>
+  <div class="tip-item">艾菲尔铁塔电梯票提前预约</div>
+  <div class="tip-item">凯旋门登顶 €16/人</div>
+  <div class="tip-item">Galeries Lafayette 店内即时退税 满€100退约12%</div>
+  <div class="tip-item">机场大巴 Porte Maillot → 博韦 约1.5小时</div>
+  <div class="tip-item">购买 Navigo Easy 交通卡三人各一张</div>
+</div>
+
+<main>
+
+  <!-- DAY 1 -->
+  <div class="day-section" id="day1">
+    <div class="day-header">
+      <div class="day-number">01</div>
+      <div class="day-info">
+        <div class="day-title">抵达 · 凯旋门 · 香榭初逛</div>
+        <div class="day-date">Saturday · 21 March 2026</div>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="event">
+        <div class="event-time">15:20</div>
+        <div class="event-body">
+          <div class="event-title">✈️ 博韦机场落地</div>
+          <div class="event-note">FR5591 · 爱丁堡出发 12:40，飞行1小时40分。出机场购买 Beauvais Navette 机场大巴票（约€17/人），直达 Porte Maillot。</div>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-time">17:30</div>
+        <div class="event-body">
+          <div class="event-title">🏨 入住 TRIBE La Défense</div>
+          <div class="event-note">11 Rue de l'Abreuvoir, Courbevoie · 评分 4.5 · 放下行李，稍作休息。</div>
+        </div>
+      </div>
+      <div class="event meal">
+        <div class="event-time">18:00</div>
+        <div class="event-body">
+          <div class="event-title">🍽️ 晚餐 <span class="tag tag-food">餐饮</span></div>
+          <div class="event-note">香榭丽舍大道沿线法式 Brasserie，正式开启巴黎状态。</div>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-time">19:30</div>
+        <div class="event-body">
+          <div class="event-title">🏛️ 凯旋门登顶 <span class="tag tag-must">必去</span></div>
+          <div class="event-note">夜灯璀璨，俯瞰十二条放射大道。开放至22:30，不赶时间。€16/人，提前网购票。</div>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-time">21:00</div>
+        <div class="event-body">
+          <div class="event-title">🛍️ Galeries Lafayette 踩点 <span class="tag tag-shop">购物</span></div>
+          <div class="event-note">就在凯旋门旁边，周六开到21:00。先踩点看看有什么想买的，明天再正式出手。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 2 -->
+  <div class="day-section" id="day2">
+    <div class="day-header">
+      <div class="day-number">02</div>
+      <div class="day-info">
+        <div class="day-title">卢浮宫 · 玛黑区 · 铁塔夜景</div>
+        <div class="day-date">Sunday · 22 March 2026</div>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="event">
+        <div class="event-time">09:30</div>
+        <div class="event-body">
+          <div class="event-title">🚇 出门，前往卢浮宫</div>
+          <div class="event-note">从酒店乘地铁1号线，约25分钟到 Palais Royal–Musée du Louvre 站。</div>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-time">10:00</div>
+        <div class="event-body">
+          <div class="event-title">🎨 卢浮宫 <span class="tag tag-must">必去</span></div>
+          <div class="event-note">⚠️ 必须提前网购票！周日人极多。重点：蒙娜丽莎、断臂维纳斯、胜利女神。游览约2.5–3小时。</div>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-time">12:45</div>
+        <div class="event-body">
+          <div class="event-title">🛍️ 玛黑区 Le Marais <span class="tag tag-shop">购物</span></div>
+          <div class="event-note">卢浮宫步行15分钟可到。Rue des Francs-Bourgeois 主街：独立品牌服饰、设计小物、法式甜点。风格比香榭更有腔调，不那么游客化。在这里吃午餐。</div>
+        </div>
+      </div>
+      <div class="event meal">
+        <div class="event-time">18:00</div>
+        <div class="event-body">
+          <div class="event-title">🍽️ 晚餐 — 特罗卡德罗 <span class="tag tag-food">餐饮</span></div>
+          <div class="event-note">特罗卡德罗花园旁边找一家餐厅，一边吃饭一边就能看到铁塔轮廓，吃完直接走到广场等夜景。</div>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-time">天黑后</div>
+        <div class="event-body">
+          <div class="event-title">🗼 艾菲尔铁塔夜景 <span class="tag tag-must">必去</span></div>
+          <div class="event-note">特罗卡德罗花园是正对铁塔最佳拍照位。每整点铁塔闪光6分钟，3月日落约19:30，约20:00后看闪光效果最佳。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 3 -->
+  <div class="day-section" id="day3">
+    <div class="day-header">
+      <div class="day-number">03</div>
+      <div class="day-info">
+        <div class="day-title">香榭购物 · 告别巴黎</div>
+        <div class="day-date">Monday · 23 March 2026</div>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="event">
+        <div class="event-time">09:30</div>
+        <div class="event-body">
+          <div class="event-title">🚇 出门，前往香榭丽舍</div>
+          <div class="event-note">地铁1号线直达 George V 或 Franklin D. Roosevelt 站。</div>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-time">10:00</div>
+        <div class="event-body">
+          <div class="event-title">🛍️ Galeries Lafayette Champs-Élysées <span class="tag tag-shop">购物</span></div>
+          <div class="event-note">⭐ 店内即时退税（Global Blue）。消费满€100当场退约12%，完美解决博韦机场无退税机问题。服装、美妆、纪念品一站搞定。</div>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-time">12:00</div>
+        <div class="event-body">
+          <div class="event-title">🛍️ Sephora Champs-Élysées <span class="tag tag-shop">购物</span></div>
+          <div class="event-note">全球最大 Sephora 旗舰店，就在 GL 隔壁，顺路逛，喜欢什么随手拿。</div>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-time">13:30</div>
+        <div class="event-body">
+          <div class="event-title">🚶 沿香榭丽舍继续逛</div>
+          <div class="event-note">还有时间，可以继续沿大道闲逛其他店铺，或回头逛玛黑区没买够的。</div>
+        </div>
+      </div>
+      <div class="event meal">
+        <div class="event-time">15:00</div>
+        <div class="event-body">
+          <div class="event-title">🍽️ 告别午餐 <span class="tag tag-food">餐饮</span></div>
+          <div class="event-note">附近找一家轻松的法式咖啡馆或小餐厅，最后享受一顿巴黎的悠闲时光。</div>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-time">16:15</div>
+        <div class="event-body">
+          <div class="event-title">🏨 回酒店取行李、退房</div>
+          <div class="event-note">地铁返回拉德芳斯，整理行李准备出发。</div>
+        </div>
+      </div>
+      <div class="event warning">
+        <div class="event-time">⚠️ 17:00</div>
+        <div class="event-body">
+          <div class="event-title">🚇 出发前往 Porte Maillot <span class="tag tag-tip">注意</span></div>
+          <div class="event-note">地铁约15分钟。在 Porte Maillot 购买/出示机场大巴票（Beauvais Navette），17:30上车。</div>
+        </div>
+      </div>
+      <div class="event warning">
+        <div class="event-time">17:30</div>
+        <div class="event-body">
+          <div class="event-title">🚌 机场大巴出发</div>
+          <div class="event-note">约1.5小时车程，19:00–19:15抵达博韦机场。</div>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-time">19:15</div>
+        <div class="event-body">
+          <div class="event-title">✈️ 博韦机场办理登机</div>
+          <div class="event-note">FR5592 · 21:15 起飞 · 博韦 → 爱丁堡 · 1小时40分 · 抵达 21:55</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAP -->
+  <div class="section-divider">地图总览</div>
+
+  <div class="map-section" id="mapSection">
+    <div class="map-header">
+      <h2>行程地图</h2>
+      <p>点击各天按钮，直接在 Google Maps 中查看路线</p>
+    </div>
+    <div class="map-days">
+      <div class="map-day">
+        <div class="map-day-label">Day 01 · Saturday 21 Mar</div>
+        <div class="map-day-title">抵达 · 凯旋门 · 香榭</div>
+        <ul class="map-stops">
+          <li>TRIBE La Défense（酒店）</li>
+          <li>凯旋门 Arc de Triomphe</li>
+          <li>Galeries Lafayette Champs-Élysées</li>
+        </ul>
+        <a class="map-btn" href="https://www.google.com/maps/dir/TRIBE+Paris+La+Defense+Esplanade,+Courbevoie/Arc+de+Triomphe,+Paris/Galeries+Lafayette+Champs-Elysees,+Paris" target="_blank">
+          📍 在 Google Maps 打开
+        </a>
+      </div>
+      <div class="map-day">
+        <div class="map-day-label">Day 02 · Sunday 22 Mar</div>
+        <div class="map-day-title">卢浮宫 · 玛黑 · 铁塔</div>
+        <ul class="map-stops">
+          <li>卢浮宫 Louvre Museum</li>
+          <li>玛黑区 Le Marais</li>
+          <li>特罗卡德罗花园（晚餐 + 铁塔）</li>
+        </ul>
+        <a class="map-btn" href="https://www.google.com/maps/dir/Louvre+Museum,+Paris/Le+Marais,+Paris/Jardins+du+Trocadero,+Paris/Eiffel+Tower,+Paris" target="_blank">
+          📍 在 Google Maps 打开
+        </a>
+      </div>
+      <div class="map-day">
+        <div class="map-day-label">Day 03 · Monday 23 Mar</div>
+        <div class="map-day-title">香榭购物 · 返程</div>
+        <ul class="map-stops">
+          <li>Galeries Lafayette Champs-Élysées</li>
+          <li>Sephora Champs-Élysées</li>
+          <li>Porte Maillot（机场大巴）</li>
+        </ul>
+        <a class="map-btn" href="https://www.google.com/maps/dir/Galeries+Lafayette+Champs-Elysees,+Paris/Sephora+Champs+Elysees,+Paris/Porte+Maillot,+Paris" target="_blank">
+          📍 在 Google Maps 打开
+        </a>
+      </div>
+    </div>
+    <a class="map-btn-full" href="https://www.google.com/maps/search/Paris+landmarks/@48.862,2.313,13z" target="_blank">
+      🗺️ 查看巴黎所有景点总览地图
+    </a>
+  </div>
+
+  <!-- NOTES -->
+  <div class="section-divider">实用贴士</div>
+
+  <div class="notes-grid" id="notesGrid">
+    <div class="note-card" data-icon="🎟️">
+      <h3>提前购票</h3>
+      <ul>
+        <li>卢浮宫 — 必须提前网购，周日人极多</li>
+        <li>艾菲尔铁塔 — 提前预约电梯票</li>
+        <li>凯旋门 — €16/人，网购可跳队</li>
+      </ul>
+    </div>
+    <div class="note-card" data-icon="💰">
+      <h3>退税攻略</h3>
+      <p>Galeries Lafayette Champs-Élysées 有店内即时退税（Global Blue），消费满€100当场退约12%到银行卡，无需博韦机场盖章，完美解决退税难题。</p>
+    </div>
+    <div class="note-card" data-icon="🚇">
+      <h3>交通</h3>
+      <ul>
+        <li>购买 Navigo Easy 交通卡，三人各一张</li>
+        <li>酒店 → 市区：地铁1号线约20分钟</li>
+        <li>机场大巴：Porte Maillot → 博韦 约1.5小时</li>
+      </ul>
+    </div>
+    <div class="note-card" data-icon="🌧️">
+      <h3>三月巴黎</h3>
+      <p>偶有小雨，建议带折叠伞。日落约19:30，铁塔整点闪光6分钟，20:00后效果最佳。三月天气凉爽，穿着上留意保暖。</p>
+    </div>
+    <div class="note-card" data-icon="✈️">
+      <h3>机场信息</h3>
+      <ul>
+        <li>去程：FR5591 · 12:40 EDI → 15:20 BVA</li>
+        <li>回程：FR5592 · 21:15 BVA → 21:55 EDI</li>
+        <li>订单号（去）：R7DD6U</li>
+        <li>订单号（回）：M2QBMD</li>
+      </ul>
+    </div>
+    <div class="note-card" data-icon="🗼">
+      <h3>铁塔闪光时间</h3>
+      <p>日落后每整点闪光6分钟，持续至凌晨1:00。建议提前到达特罗卡德罗占好位置，整点前后人群会聚集，氛围绝佳。</p>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>巴黎三日行程 · <span>21–23 March 2026</span> · 三人同行 · Edinburgh → Paris</p>
+</footer>
+
+<script>
+  // Intersection Observer for scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.day-section, .map-section, .notes-grid').forEach(el => {
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
